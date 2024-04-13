@@ -1,5 +1,6 @@
 import pygame
 from joystick_handler import JoystickHandler
+from motor2d import Motor2D, Module
 
 class Bot(pygame.sprite.Sprite):
     def __init__(self, game, x, y, joystick_handler, id):
@@ -21,6 +22,13 @@ class Bot(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
+        self.FL_Motor = Motor2D((0, 1))
+        self.FR_Motor = Motor2D((1, 1))
+        self.BL_Motor = Motor2D((0, 0))
+        self.BR_Motor = Motor2D((1, 0))
+
+        self.module = Module(self.FL_Motor, self.FR_Motor, self.BL_Motor, self.BR_Motor)
+
         self.joystick_handler = joystick_handler
         
         self.joystick = self.joystick_handler.get_joystick(id)
@@ -38,6 +46,8 @@ class Bot(pygame.sprite.Sprite):
     def movement(self):
         self.x_change += self.joystick_handler.get_ajusted_axis(self.joystick, 0)
         self.y_change += self.joystick_handler.get_ajusted_axis(self.joystick, 1)
+
+        self.module.set_module_state()
     
     
     def rotate(self):
